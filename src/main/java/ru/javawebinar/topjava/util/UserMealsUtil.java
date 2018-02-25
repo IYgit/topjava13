@@ -46,6 +46,10 @@ public class UserMealsUtil {
         return getTimeFilteredList(withExceedList, startTime, endTime);
     }
 
+    /**
+     * Method calculates summary calories per day
+     * @param dayMealList - list of meal per day
+     * @return - summary calories per day*/
     private static int getSummaryCalories(List<UserMeal> dayMealList) {
         int summaryCalories = 0;
         for (UserMeal meal: dayMealList){
@@ -54,6 +58,11 @@ public class UserMealsUtil {
         return summaryCalories;
     }
 
+    /**
+     * Method return list of meal for certain day
+     * @param mealList - total list of meal
+     * @param date - date for getting list of meal
+     * @return list of meal*/
     private static List<UserMeal> getDayMealList(List<UserMeal> mealList, LocalDate date) {
         if (mealList == null || mealList.isEmpty() || date == null)
             return null;
@@ -66,6 +75,10 @@ public class UserMealsUtil {
         return dayMealList;
     }
 
+    /**
+     * Method return the Set of days for given list
+     * @param mealList - list of meals for getting Set of dates
+     * @return set of days*/
     private static Set<LocalDate> getLocalDatesSet(List<UserMeal> mealList) {
         if (mealList == null || mealList.isEmpty())
             return null;
@@ -78,6 +91,12 @@ public class UserMealsUtil {
     }
 
 
+    /**
+     * Method reject meals out of date limits
+     * @param mealList - list of meal for checking data limits
+     * @param startTime - start time
+     * @param endTime - end time
+     * @return filtered list of meals*/
     private static List<UserMealWithExceed> getTimeFilteredList(List<UserMealWithExceed> mealList, LocalTime startTime, LocalTime endTime) {
         if (mealList == null || mealList.isEmpty() || startTime == null || endTime == null)
             return null;
