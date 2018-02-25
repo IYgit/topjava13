@@ -85,7 +85,7 @@ public class UserMealsUtil {
         List<UserMealWithExceed> timeFiltered = new ArrayList<>();
 
         for (UserMealWithExceed meal: mealList){
-            if (TimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime))
+            if (!TimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime))
                 continue;
             else timeFiltered.add(meal);
         }
