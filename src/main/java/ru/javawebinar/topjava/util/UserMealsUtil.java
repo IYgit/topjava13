@@ -3,11 +3,11 @@ package ru.javawebinar.topjava.util;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.UserMealWithExceed;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * GKislin
@@ -24,12 +24,72 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 31,20,0), "Ужин", 510)
         );
         getFilteredWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12,0), 2000);
-//        .toLocalDate();
-//        .toLocalTime();
     }
 
     public static List<UserMealWithExceed>  getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         // TODO return filtered list with correctly exceeded field
-        return null;
+        if (mealList == null || mealList.isEmpty() || startTime == null || endTime == null)
+            return null;
+
+        Set<LocalDate> localDatesSet = getLocalDatesSet(mealList);
+
+        List<UserMealWithExceed> withExceedList = new ArrayList<>();
+
+        for (LocalDate localDate: localDatesSet){
+            List<UserMeal> dayMealList = getDayMealList(mealList, localDate);
+            int summaryCalories = getSummaryCalories(dayMealList);
+            for (UserMeal meal: dayMealList){
+                withExceedList.add(new UserMealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), summaryCalories > caloriesPerDay));
+            }
+        }
+
+        return getTimeFilteredList(withExceedList, startTime, endTime);
+    }
+
+    private static int getSummaryCalories(List<UserMeal> dayMealList) {
+        int summaryCalories = 0;
+        for (UserMeal meal: dayMealList){
+            summaryCalories+= meal.getCalories();
+        }
+        return summaryCalories;
+    }
+
+    private static List<UserMeal> getDayMealList(List<UserMeal> mealList, LocalDate date) {
+        if (mealList == null || mealList.isEmpty() || date == null)
+            return null;
+
+        List<UserMeal> dayMealList = new ArrayList<>();
+        for (UserMeal meal: mealList){
+            if (meal.getDateTime().toLocalDate().isEqual(date))
+                dayMealList.add(meal);
+        }
+        return dayMealList;
+    }
+
+    private static Set<LocalDate> getLocalDatesSet(List<UserMeal> mealList) {
+        if (mealList == null || mealList.isEmpty())
+            return null;
+
+        Set<LocalDate> localDates = new HashSet<>();
+        for(UserMeal meal: mealList){
+            localDates.add(meal.getDateTime().toLocalDate());
+        }
+        return localDates;
+    }
+
+
+    private static List<UserMealWithExceed> getTimeFilteredList(List<UserMealWithExceed> mealList, LocalTime startTime, LocalTime endTime) {
+        if (mealList == null || mealList.isEmpty() || startTime == null || endTime == null)
+            return null;
+
+        List<UserMealWithExceed> timeFiltered = new ArrayList<>();
+
+        for (UserMealWithExceed meal: mealList){
+            if (TimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime))
+                continue;
+            else timeFiltered.add(meal);
+        }
+
+        return timeFiltered;
     }
 }
