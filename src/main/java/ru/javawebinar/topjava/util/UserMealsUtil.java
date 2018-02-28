@@ -8,10 +8,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,13 +29,9 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExceed>  getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        // TODO return filtered list with correctly exceeded field
         if (mealList == null || mealList.isEmpty() || startTime == null || endTime == null)
             return null;
-        // using Stream API
         List<UserMealWithExceed> withExceedList = getUserMealWithExceeds(mealList, startTime, endTime, caloriesPerDay);
-        // using classic way
-//        List<UserMealWithExceed> withExceedList = getUserMealWithExceeds_1(mealList, startTime, endTime, caloriesPerDay);
 
         return withExceedList;
     }
@@ -74,7 +66,7 @@ public class UserMealsUtil {
      * @param endTime - end time for filtering;
      * @param caloriesPerDay - value for calculating UserMealWithExceed.exceed field.
      * If summary calories per day overflows caloriesPerDay UserMealWithExceed.exceed is set to true otherwise false.*/
-    private static List<UserMealWithExceed> getUserMealWithExceeds_1(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    private static List<UserMealWithExceed> getUserMealWithExceedsWithoutStream(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Set<LocalDate> localDatesSet = getLocalDatesSet(mealList);
 
         List<UserMealWithExceed> withExceedList = new ArrayList<>();
