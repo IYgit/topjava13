@@ -4,8 +4,12 @@
     <!-- To enable JMX Management -->
     <jmxConfigurator/>
 
+    <!-- логвування в файл -->
     <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <!-- TOPJAVA_ROOT встановлена як змінна середовища в ~/.bash_profile:
+            export TOPJAVA_ROOT="/home/iy/IntellijIDEA/Intership/topjava"-->
         <file>${TOPJAVA_ROOT}/log/topjava.log</file>
+        <!--<file>/home/iy/IntellijIDEA/Intership/topjava/log/topjava.log</file>-->
 
         <encoder>
             <charset>UTF-8</charset>
@@ -13,6 +17,7 @@
         </encoder>
     </appender>
 
+    <!-- логування в консоль -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <charset>UTF-8</charset>
@@ -20,8 +25,10 @@
         </encoder>
     </appender>
 
+    <!-- рівень логування для пакета ru.javawebinar.topjava debug-->
     <logger name="ru.javawebinar.topjava" level="debug"/>
 
+    <!--рівень логування по замовчанню info-->
     <root level="info">
         <appender-ref ref="file"/>
         <appender-ref ref="console"/>
