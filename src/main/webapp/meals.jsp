@@ -7,6 +7,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <html>
 <head>
     <title>Meals</title>
@@ -35,6 +36,7 @@
                     <c:set var="color" value="red"/>
                 </c:otherwise>
             </c:choose>
+            <%-- set horizontal line--%>
             <tr>
                 <td colspan="3">
                     <hr>
@@ -53,5 +55,6 @@
     </table>
 </c:if>
 
+<%@ include file="form.jsp"%>
 </body>
 </html>

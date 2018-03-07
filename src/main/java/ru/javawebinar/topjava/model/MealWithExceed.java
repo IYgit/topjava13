@@ -1,17 +1,18 @@
 package ru.javawebinar.topjava.model;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MealWithExceed {
+    public final static AtomicInteger ID = new AtomicInteger(0);
+    private final int id;
     private final LocalDateTime dateTime;
-
     private final String description;
-
     private final int calories;
-
     private final boolean exceed;
 
     public MealWithExceed(LocalDateTime dateTime, String description, int calories, boolean exceed) {
+        this.id = ID.addAndGet(1);
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
