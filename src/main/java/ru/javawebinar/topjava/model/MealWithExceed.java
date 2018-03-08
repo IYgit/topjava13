@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MealWithExceed {
-    public final static AtomicInteger ID = new AtomicInteger(0);
+    public final static AtomicInteger ID = new AtomicInteger(-1);
     private final int id;
     private final LocalDateTime dateTime;
     private final String description;
@@ -17,6 +17,14 @@ public class MealWithExceed {
         this.description = description;
         this.calories = calories;
         this.exceed = exceed;
+    }
+
+    public static void resetId(){
+        ID.set(-1);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public LocalDateTime getDateTime() {

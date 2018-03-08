@@ -21,6 +21,10 @@ public class Meal {
         this.calories = calories;
     }
 
+    public static void resetId(){
+        ID.set(-1);
+    }
+
     public int getId() {
         return id;
     }
