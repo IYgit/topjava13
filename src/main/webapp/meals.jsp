@@ -14,15 +14,22 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
-<h3><a href="index.html">Home</a></h3>
+<table>
+    <tr>
+        <td width="100"><h3><a href="index.html">Home</a></h3></td>
+        <td width="100"><h3><a href="?add=true#shadow">Add meal</a></h3></td>
+    </tr>
+</table>
 <hr>
 <c:if test="${!empty meals}">
     <table class="tg">
             <%-- table head--%>
         <tr align="left">
-            <th width="500">Date</th>
-            <th width="500">Description</th>
-            <th width="500">Calories</th>
+            <th width="300">Date</th>
+            <th width="300">Description</th>
+            <th width="300">Calories</th>
+            <th width="100">Edit</th>
+            <th width="100">Delete</th>
         </tr>
 
             <%-- table data--%>
@@ -38,7 +45,7 @@
             </c:choose>
             <%-- set horizontal line--%>
             <tr>
-                <td colspan="3">
+                <td colspan="5">
                     <hr>
                 </td>
             </tr>
@@ -50,11 +57,16 @@
                 </td>
                 <td>${meal.getDescription()}</td>
                 <td>${meal.getCalories()}</td>
+                <%-- editing. Add id to url for getting it in method doGet()--%>
+                <td><a href="?id=${meal.getId()}#shadow">edit</a></td>
+                <%-- deleting. Add id to url for getting it in method doGet()--%>
+                <td><a href="?id=${meal.getId()}&del=true">delete</a></td>
             </tr>
         </c:forEach>
     </table>
 </c:if>
 
 <%@ include file="form.jsp"%>
+
 </body>
 </html>

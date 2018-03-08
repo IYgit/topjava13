@@ -37,12 +37,19 @@ public class MealsUtil {
         System.out.println(getFilteredWithExceededInOnePass2(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
     }
 
+    public static void resetId(){
+        Meal.resetId();
+        MealWithExceed.resetId();
+    }
+
     public static List<MealWithExceed> convertToMealWithExceed(List<Meal> meals, int caloriesPerDay) {
+        resetId();
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
                 .collect(Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories)));
 
         return meals.stream()
                 .map(meal -> createWithExceed(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
+                .sorted((o1, o2) -> o1.getDateTime().compareTo(o2.getDateTime()))
                 .collect(toList());
     }
 
