@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web;
 
+import ru.javawebinar.topjava.dao.MealDaoImpl;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -21,6 +22,7 @@ import java.util.List;
 public class MealServlet extends HttpServlet {
     private int id;
     private boolean add;
+    private MealDaoImpl mealDao = new MealDaoImpl();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");  // set encoding (only for method Post!)
@@ -29,8 +31,14 @@ public class MealServlet extends HttpServlet {
             String description = request.getParameter("description");
             int calories = Integer.parseInt(request.getParameter("calories"));
             if (add)
-                MealsUtil.mealsMap.put(MealsUtil.mealsMap.size(), new Meal(localDateTime, description, calories));
-            else MealsUtil.mealsMap.replace(id, new Meal(localDateTime, description, calories));
+                mealDao.addMeal(new Meal(localDateTime, description, calories));
+            else {
+                Meal meal = mealDao.getMealById(id);
+                meal.setDateTime(localDateTime);
+                meal.setDescription(description);
+                meal.setCalories(calories);
+                mealDao.updateMeal(meal);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -43,7 +51,8 @@ public class MealServlet extends HttpServlet {
         if (request.getParameter("id") != null) {
             id = Integer.parseInt(request.getParameter("id"));
             if (request.getParameter("del") != null)
-                MealsUtil.mealsMap.remove(id);
+                mealDao.removeMeal(id);
+//                MealsUtil.mealsMap.remove(id);
         } else id = -1;
 
         if (request.getParameter("add") != null)

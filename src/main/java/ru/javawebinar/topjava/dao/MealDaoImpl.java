@@ -13,7 +13,7 @@ public class MealDaoImpl implements MealDao {
 
     @Override
     public void addMeal(Meal meal) {
-        MealsUtil.mealsMap.put(Meal.ID.get(), meal);
+        MealsUtil.mealsMap.put(listMeals().size() + 1, meal);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class MealDaoImpl implements MealDao {
 
     @Override
     public void removeMeal(int id) {
-        MealsUtil.mealsMap.remove(getMealById(id));
+        MealsUtil.mealsMap.remove(id);
     }
 
     @Override

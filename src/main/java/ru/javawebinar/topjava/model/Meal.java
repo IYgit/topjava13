@@ -7,12 +7,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Meal {
     public final static AtomicInteger ID = new AtomicInteger(-1);
-    private final LocalDateTime dateTime;
-    private final int id;
-
-    private final String description;
-
-    private final int calories;
+    private  LocalDateTime dateTime;
+    private  int id;
+    private  String description;
+    private  int calories;
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
         this.id = ID.addAndGet(1);
@@ -47,5 +45,21 @@ public class Meal {
 
     public LocalTime getTime() {
         return dateTime.toLocalTime();
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
     }
 }
