@@ -14,7 +14,9 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 public abstract class AbstractUserController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    @Autowired
+    // means that field mast be initialized by bean-class declared in spring context (spring/spring-app.xml)
+    // @Autowired(required = false) // means: if initialized bean had not been found, set null
+    @Autowired // if take place ambiguous (неоднозначність) we mast initialize field in spring context as property of bean
     private UserService service;
 
     public List<User> getAll() {

@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
@@ -16,7 +17,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
 
-    @Autowired
+    /* means that field mast be initialized by bean-class declared in spring context (spring/spring-app.xml)
+     @Autowired(required = false) // means: if initialized bean had not been found, set null
+     Якщо треба вказати конкретну реалізацію UserRepository для ініціалізації поля, вказуємо її в параметрах:
+     @Autowired("userRepository"). Відповідний клас (MockUserRepository) повинен бути позначений анотацією
+      з параметром: @Repository("UserRepository")*/
+    @Autowired // if take place ambiguous (неоднозначність) we mast initialize field in spring context as property of bean
     public UserServiceImpl(UserRepository repository) {
         this.repository = repository;
     }

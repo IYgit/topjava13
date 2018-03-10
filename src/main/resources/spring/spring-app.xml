@@ -4,21 +4,30 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!--
+    <!-- include to spring context annotations classes (activate annotations)-->
+    <!--<context:annotation-config/>--> <!-- Not necessary, already included with component-scan -->
+
+    <!-- create beans from classes placed in directory 'repository'.
+    Class mast be annotated as @Service or @Controller or @Repository-->
+    <context:component-scan base-package="ru.javawebinar.**.repository"/>
+    <!-- create beans from classes placed in directory 'service'.
+        Class mast be annotated as @Service or @Controller or @Repository-->
+    <context:component-scan base-package="ru.javawebinar.**.service"/>
+    <!-- create beans from classes placed in directory 'web'.
+        Class mast be annotated as @Service or @Controller or @Repository-->
+    <context:component-scan base-package="ru.javawebinar.**.web"/>
+
+    <!--    Beans: mast to have setter methods!
+             // declare bean (not necessary, already have been declared in package declaration above (component-scan base-package)
             <bean class="ru.javawebinar.topjava.repository.mock.MockUserRepositoryImpl" id="mockUserRepository"/>
 
+            // declare bean (not necessary, already have been declared in package declaration above (component-scan base-package)
             <bean class="ru.javawebinar.topjava.service.UserServiceImpl">
-                <constructor-arg name="repository" ref="mockUserRepository"/>
+                // initialize constructor of bean  by another bean
+                <constructor-arg name="repository" ref="mockUserRepository"/>  // not necessary, already initialised as @Autowired
+                // initialize field of bean  by another bean
+                <property name="repository" ref="mockUserRepository"/>
             </bean>
-    -->
-
-    <!-- Not necessary, already included with component-scan -->
-    <!--<context:annotation-config/>-->
-
-    <context:component-scan base-package="ru.javawebinar.**.repository"/>
-
-    <context:component-scan base-package="ru.javawebinar.**.service"/>
-
-    <context:component-scan base-package="ru.javawebinar.**.web"/>
+     -->
 
 </beans>
