@@ -3,9 +3,11 @@ package ru.javawebinar.topjava.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class Meal {
+public class Meal extends AbstractBaseEntity{
     private Integer id;
+    private AtomicInteger userId;
 
     private final LocalDateTime dateTime;
 
@@ -18,10 +20,19 @@ public class Meal {
     }
 
     public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
-        this.id = id;
+        super(id);
+//        this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
+    }
+
+    public Integer getUserId() {
+        return userId.get();
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId.set(userId);
     }
 
     public Integer getId() {

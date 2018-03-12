@@ -11,7 +11,7 @@ import java.util.List;
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
-public abstract class AbstractUserController {
+public abstract class AbstractUserController implements UserController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     // means that field mast be initialized by bean-class declared in spring context (spring/spring-app.xml)
@@ -19,33 +19,39 @@ public abstract class AbstractUserController {
     @Autowired // if take place ambiguous (неоднозначність) we mast initialize field in spring context as property of bean
     private UserService service;
 
+    @Override
     public List<User> getAll() {
         log.info("getAll");
         return service.getAll();
     }
 
+    @Override
     public User get(int id) {
         log.info("get {}", id);
         return service.get(id);
     }
 
+    @Override
     public User create(User user) {
         log.info("create {}", user);
         checkNew(user);
         return service.create(user);
     }
 
+    @Override
     public void delete(int id) {
         log.info("delete {}", id);
         service.delete(id);
     }
 
+    @Override
     public void update(User user, int id) {
         log.info("update {} with id={}", user, id);
         assureIdConsistent(user, id);
         service.update(user);
     }
 
+    @Override
     public User getByMail(String email) {
         log.info("getByEmail {}", email);
         return service.getByEmail(email);
