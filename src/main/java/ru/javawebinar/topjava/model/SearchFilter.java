@@ -52,4 +52,15 @@ public class SearchFilter {
     public void setSearchKey(String searchKey) {
         this.searchKey = searchKey;
     }
+
+    @Override
+    public String toString() {
+        return "SearchFilter{" +
+                "fromDate=" + fromDate +
+                ", toDate=" + toDate +
+                ", fromTime=" + fromTime +
+                ", toTime=" + toTime +
+                ", searchKey='" + searchKey + '\'' +
+                '}';
+    }
 }

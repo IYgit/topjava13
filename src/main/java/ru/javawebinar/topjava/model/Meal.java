@@ -1,13 +1,15 @@
 package ru.javawebinar.topjava.model;
 
+import ru.javawebinar.topjava.AuthorizedUser;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Meal extends AbstractBaseEntity{
-    private Integer id;
-    private AtomicInteger userId;
+//    private Integer id;
+    private AtomicInteger userId = new AtomicInteger(AuthorizedUser.id());
 
     private final LocalDateTime dateTime;
 
@@ -22,6 +24,14 @@ public class Meal extends AbstractBaseEntity{
     public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
         super(id);
 //        this.id = id;
+        this.dateTime = dateTime;
+        this.description = description;
+        this.calories = calories;
+    }
+
+    public Meal(Integer userId, Integer id, LocalDateTime dateTime, String description, int calories) {
+        super(id);
+        this.userId.set(userId);
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;

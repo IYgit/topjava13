@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web.meal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.SearchFilter;
 import ru.javawebinar.topjava.model.User;
@@ -22,19 +23,20 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
  */
 public class AbstractMealController implements MealController {
     private static final Logger log = getLogger(AbstractMealController.class);
+    @Autowired
     private MealService mealService;
 
     @Override
-    public List<Meal> getAll(User user) {
+    public List<Meal> getAll(int userId) {
         log.info("getAll");
-        return mealService.getAll(user);
+        return mealService.getAll(userId);
     }
 
     @Override
-    public List<Meal> getFilteredList(User user, SearchFilter filter) {
+    public List<Meal> getFilteredList(int userId, SearchFilter filter) {
         log.info("getFilteredList");
 
-        return mealService.getFilteredList(user, filter);
+        return mealService.getFilteredList(userId, filter);
     }
 
     @Override
@@ -46,7 +48,6 @@ public class AbstractMealController implements MealController {
     @Override
     public Meal create(Meal meal) {
         log.info("create {}", meal);
-        checkNew(meal);
         return mealService.create(meal);
     }
 

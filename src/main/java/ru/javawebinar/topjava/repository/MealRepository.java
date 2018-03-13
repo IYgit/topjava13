@@ -10,11 +10,11 @@ import java.util.List;
 public interface MealRepository {
     Meal save(Meal meal);
 
-    void delete(int id);
+    boolean delete(int id);
 
     Meal get(int id);
 
-    Collection<Meal> getAll(User user);
+    Collection<Meal> getAll(int userId);
 
-    List<Meal> getFilteredList(SearchFilter filter);
+    List<Meal> getFilteredList(int userId, SearchFilter filter);
 }

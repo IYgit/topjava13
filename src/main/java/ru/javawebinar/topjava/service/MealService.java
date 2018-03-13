@@ -8,9 +8,9 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.util.List;
 
 public interface MealService {
-    List<Meal> getAll(User user);
+    List<Meal> getAll(int userId);
 
-    List<Meal> getFilteredList(User user, SearchFilter filter);
+    List<Meal> getFilteredList(int userId, SearchFilter filter);
 
     Meal get(int id) throws NotFoundException;
 

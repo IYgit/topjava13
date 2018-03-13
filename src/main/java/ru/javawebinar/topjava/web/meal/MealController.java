@@ -11,9 +11,9 @@ import java.util.function.Predicate;
  * Created by iy on 12.03.18.
  */
 public interface MealController {
-    List<Meal> getAll(User user);
+    List<Meal> getAll(int userId);
 
-    List<Meal> getFilteredList(User user, SearchFilter filter);
+    List<Meal> getFilteredList(int userId, SearchFilter filter);
 
     Meal get(int id);
 
