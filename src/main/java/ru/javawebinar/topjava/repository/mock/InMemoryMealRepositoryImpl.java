@@ -9,13 +9,18 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import java.nio.file.DirectoryStream;
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Repository
@@ -59,7 +64,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         log.info("getAll for userId={}", userId);
         List<Meal> meals = repository.values().stream()
                 .filter(meal -> meal.getUserId() == userId)
-                .sorted(Comparator.comparing(meal -> meal.getDateTime()))
+                .sorted((m1, m2) -> m2.getDate().compareTo(m1.getDate()))
                 .collect(Collectors.toList());
 
         return meals.isEmpty() ? null : meals;
@@ -68,20 +73,31 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public List<Meal> getFilteredList(int userId, SearchFilter filter) {
         log.info("getFilteredList for userId {} with filter {}", userId, filter);
-        Predicate<Meal> predicate = meal -> filter.getFromDate() == null ? true : meal.getDate().isAfter(filter.getFromDate());
-        predicate.and(meal -> filter.getToDate() == null ? true : meal.getDate().isBefore(filter.getToDate()));
-        predicate.and(meal -> filter.getFromTime() == null ? true : meal.getTime().isAfter(filter.getFromTime()));
-        predicate.and(meal -> filter.getToTime() == null ? true : meal.getTime().isBefore(filter.getToTime()));
-        boolean isSearchKey = filter.getSearchKey() != null && !filter.getSearchKey().isEmpty();
-        if (isSearchKey){
-            String regex = ".*" + filter.getSearchKey() + ".*";
-            predicate.and(meal -> meal.getDate().toString().matches(regex));
-            predicate.and(meal -> meal.getTime().toString().matches(regex));
-            predicate.and(meal -> meal.getDescription().matches(regex));
-            predicate.and(meal -> String.valueOf(meal.getCalories()).matches(regex));
-        }
+        Predicate<Meal> predicate = getMealPredicate(filter);
 
         return getAll(userId).stream().filter(meal -> predicate.test(meal)).collect(Collectors.toList());
+    }
+
+    private Predicate<Meal> getMealPredicate(SearchFilter filter) {
+        Predicate<Meal> predicate = meal -> filter.getFromDate() == null ? true : meal.getDate().compareTo(filter.getFromDate()) >= 0;
+        predicate = predicate.and(meal -> filter.getToDate() == null ? true : meal.getDate().compareTo(filter.getToDate()) <= 0);
+        predicate = predicate.and(meal -> filter.getFromTime() == null ? true : meal.getTime().compareTo(filter.getFromTime()) >= 0);
+        predicate = predicate.and(meal -> filter.getToTime() == null ? true : meal.getTime().compareTo(filter.getToTime()) <= 0);
+
+        boolean isSearchKey = filter.getSearchKey() != null && !filter.getSearchKey().isEmpty();
+        Predicate<Meal> regexPredicate = null;
+        if (isSearchKey){
+            String regex = ".*" + filter.getSearchKey() + ".*";
+            regexPredicate = meal -> meal.getDate().toString().matches(regex);
+            regexPredicate = regexPredicate.or(meal -> meal.getTime().toString().matches(regex));
+            regexPredicate = regexPredicate.or(meal -> meal.getDescription().matches(regex));
+            regexPredicate = regexPredicate.or(meal -> String.valueOf(meal.getCalories()).matches(regex));
+        }
+
+        if (regexPredicate != null)
+            predicate = predicate.and(regexPredicate);
+
+        return predicate;
     }
 }
 

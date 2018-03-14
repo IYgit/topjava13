@@ -19,6 +19,8 @@
 <body>
 <section>
     <h3><a href="index.html">Home</a></h3>
+    <hr>
+<%@ include file="filter.jsp"%>
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
     <hr/>

@@ -1,22 +1,18 @@
 package ru.javawebinar.topjava.web.meal;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.SearchFilter;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.MealService;
-import ru.javawebinar.topjava.util.ValidationUtil;
+import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.getLogger;
+import static ru.javawebinar.topjava.AuthorizedUser.getCaloriesPerDay;
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
-import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
 /**
  * Created by iy on 12.03.18.
@@ -27,16 +23,15 @@ public class AbstractMealController implements MealController {
     private MealService mealService;
 
     @Override
-    public List<Meal> getAll(int userId) {
+    public List<MealWithExceed> getAll(int userId) {
         log.info("getAll");
-        return mealService.getAll(userId);
+        return MealsUtil.getWithExceeded(mealService.getAll(userId), getCaloriesPerDay());
     }
 
     @Override
-    public List<Meal> getFilteredList(int userId, SearchFilter filter) {
+    public List<MealWithExceed> getFilteredList(int userId, SearchFilter filter) {
         log.info("getFilteredList");
-
-        return mealService.getFilteredList(userId, filter);
+        return MealsUtil.getWithExceeded(mealService.getFilteredList(userId, filter), getCaloriesPerDay());
     }
 
     @Override

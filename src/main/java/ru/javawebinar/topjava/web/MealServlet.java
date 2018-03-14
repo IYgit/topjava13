@@ -7,6 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.SearchFilter;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
 import ru.javawebinar.topjava.service.MealService;
@@ -20,7 +21,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -45,7 +48,7 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
 
-        Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
+        Meal meal = new Meal(AuthorizedUser.id(), id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
@@ -58,6 +61,21 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+        SearchFilter filter = new SearchFilter();
+        String fromDate = request.getParameter("fromDate");
+        String toDate = request.getParameter("toDate");
+        String fromTime = request.getParameter("fromTime");
+        String toTime = request.getParameter("toTime");
+        String regex = request.getParameter("txt");
+        if (checkValue(fromDate)) filter.setFromDate(LocalDate.parse(fromDate));
+        if (checkValue(toDate)) filter.setToDate(LocalDate.parse(toDate));
+        if (checkValue(fromTime)) filter.setFromTime(LocalTime.parse(fromTime));
+        if (checkValue(toTime)) filter.setToTime(LocalTime.parse(toTime));
+        if (checkValue(regex)) filter.setSearchKey(regex);
+
+        String uid = request.getParameter("userId");
+        System.out.println("userId = " + uid);
+
 
         switch (action == null ? "all" : action) {
             case "delete":
@@ -78,10 +96,16 @@ public class MealServlet extends HttpServlet {
             default:
                 log.info("getAll");
                 request.setAttribute("meals",
-                        MealsUtil.getWithExceeded(mealRestController.getAll(id()), getCaloriesPerDay()));
+                        mealRestController.getFilteredList(id(), filter));
+//                        mealRestController.getAll(id()));
+//                        MealsUtil.getWithExceeded(mealRestController.getAll(id()), getCaloriesPerDay()));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
+    }
+
+    private boolean checkValue(String fromDate) {
+        return fromDate != null && fromDate != "";
     }
 
     private int getId(HttpServletRequest request) {
