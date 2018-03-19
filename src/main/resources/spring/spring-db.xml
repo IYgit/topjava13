@@ -4,9 +4,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <!-- get postgres.properties -->
     <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>
 
-    <!--no pooling-->
+    <!--no pooling;
+        it is used in beans below; defines a db source -->
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.postgresql.Driver"/>
@@ -15,11 +17,13 @@
         <property name="password" value="${database.password}"/>
     </bean>
 
+    <!-- Unnamed bean to execute sql query -->
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <constructor-arg ref="dataSource"/>
+        <constructor-arg ref="dataSource"/> <!-- pass bean 'dataSource' as constructor parameter to jdbcTemplate bean-->
     </bean>
 
+    <!-- Named bean to execute sql query -->
     <bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-        <constructor-arg ref="dataSource"/>
+        <constructor-arg ref="dataSource"/> <!-- pass bean 'dataSource' as constructor parameter to jdbcTemplate bean-->
     </bean>
 </beans>

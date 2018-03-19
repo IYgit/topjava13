@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.repository.mock;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;

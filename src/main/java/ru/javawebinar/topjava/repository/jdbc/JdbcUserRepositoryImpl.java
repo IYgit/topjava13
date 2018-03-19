@@ -16,20 +16,20 @@ import java.util.List;
 
 @Repository
 public class JdbcUserRepositoryImpl implements UserRepository {
-
+    // mapping db table fields to User fields and vice versa
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
-
+    // unnamed bean
     private final JdbcTemplate jdbcTemplate;
-
+    // named bean
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
+    // for executing inserting to DB
     private final SimpleJdbcInsert insertUser;
 
     @Autowired
     public JdbcUserRepositoryImpl(DataSource dataSource, JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.insertUser = new SimpleJdbcInsert(dataSource)
-                .withTableName("users")
-                .usingGeneratedKeyColumns("id");
+        this.insertUser = new SimpleJdbcInsert(dataSource) // insert object
+                .withTableName("users") // work with 'users' table
+                .usingGeneratedKeyColumns("id"); // us 'id' in 'where condition' (sql quarry)
 
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
@@ -37,6 +37,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
+        // mapping User fields to parameters
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", user.getId())
                 .addValue("name", user.getName())
@@ -47,9 +48,9 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                 .addValue("caloriesPerDay", user.getCaloriesPerDay());
 
         if (user.isNew()) {
-            Number newKey = insertUser.executeAndReturnKey(map);
+            Number newKey = insertUser.executeAndReturnKey(map); // insert 'user' into table
             user.setId(newKey.intValue());
-        } else if (namedParameterJdbcTemplate.update(
+        } else if (namedParameterJdbcTemplate.update( // work with map parameter name
                 "UPDATE users SET name=:name, email=:email, password=:password, " +
                         "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", map) == 0) {
             return null;
@@ -59,11 +60,13 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean delete(int id) {
+        // unnamed template: work with row number (id)
         return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
     }
 
     @Override
     public User get(int id) {
+        // mapping table fields to user fields using ROW_MAPPER
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE id=?", ROW_MAPPER, id);
         return DataAccessUtils.singleResult(users);
     }
@@ -71,11 +74,12 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Override
     public User getByEmail(String email) {
 //        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
+        // mapping table fields to user fields using ROW_MAPPER
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
         return DataAccessUtils.singleResult(users);
     }
 
-    @Override
+    @Override // mapping table fields to user fields using ROW_MAPPER
     public List<User> getAll() {
         return jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
     }

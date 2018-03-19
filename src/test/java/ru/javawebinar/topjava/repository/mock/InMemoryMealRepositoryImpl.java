@@ -1,8 +1,16 @@
 package ru.javawebinar.topjava.repository.mock;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Repository;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.CollectionUtils;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -26,7 +34,7 @@ import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 @Repository
-public class InMemoryMealRepositoryImpl implements MealRepository {
+public class InMemoryMealRepositoryImpl implements MealRepository{
     private static final Logger log = LoggerFactory.getLogger(InMemoryMealRepositoryImpl.class);
 
     // Map  userId -> (mealId-> meal)
@@ -51,6 +59,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         }
         return meals.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
+
 
     @PostConstruct
     public void postConstruct() {
