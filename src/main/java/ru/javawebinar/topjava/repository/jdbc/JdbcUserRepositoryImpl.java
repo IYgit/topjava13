@@ -13,31 +13,34 @@ import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.sql.DataSource;
 import java.util.List;
+/**We have bean DataSource which supplies connection to DB.
+ * DataSource is passing to JdbcTemplate and NamedParameterJdbcTemplate. */
 
 @Repository
 public class JdbcUserRepositoryImpl implements UserRepository {
-    // mapping db table fields to User fields and vice versa
+    // mapping db table fields to User fields and vice versa (need getters and setters in User)
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
-    // unnamed bean
+    // unnamed bean is used to pass @Nullable Object... args in sql query
     private final JdbcTemplate jdbcTemplate;
-    // named bean
+    // named bean is used to pass String parameters in sql query
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     // for executing inserting to DB
     private final SimpleJdbcInsert insertUser;
 
-    @Autowired
+    @Autowired // beans are defined in spring-db.xml
     public JdbcUserRepositoryImpl(DataSource dataSource, JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertUser = new SimpleJdbcInsert(dataSource) // insert object
                 .withTableName("users") // work with 'users' table
-                .usingGeneratedKeyColumns("id"); // us 'id' in 'where condition' (sql quarry)
+                .usingGeneratedKeyColumns("id"); // us 'id' in 'where condition' (sql quarry) (== return type 'id')
 
+        // work with default constructor and setters (mast to be in User class)
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
     public User save(User user) {
-        // mapping User fields to parameters
+        // mapping User fields to parameters (String -> Object)
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", user.getId())
                 .addValue("name", user.getName())
@@ -60,14 +63,14 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean delete(int id) {
-        // unnamed template: work with row number (id)
+        // unnamed template: work with @Nullable Object... args
         return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
     }
 
     @Override
     public User get(int id) {
-        // mapping table fields to user fields using ROW_MAPPER
-        List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE id=?", ROW_MAPPER, id);
+        // mapping table fields to user fields using ROW_MAPPER (ROW_MAPPER is needed to convert table fields to User object)
+        List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE id=?", ROW_MAPPER, id); // unnamed template: work with @Nullable Object... args
         return DataAccessUtils.singleResult(users);
     }
 

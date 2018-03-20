@@ -1,14 +1,14 @@
+-- important the order of table deleting (reverse order)
+DROP TABLE IF EXISTS meals;
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS meals;
 DROP SEQUENCE IF EXISTS global_seq;
 DROP SEQUENCE IF EXISTS meal_id;
 
 CREATE SEQUENCE global_seq
-  START 100000;   -- is used in user table
-
+  START 100000; -- is used in user table
 CREATE SEQUENCE meal_id
-  START 1;  -- is used in meals table
+  START 1; -- is used in meals table
 
 CREATE TABLE users
 (
@@ -33,10 +33,12 @@ CREATE TABLE user_roles
 
 CREATE TABLE public.meals
 (
-  id          INT PRIMARY KEY      DEFAULT nextval('meal_id'),
-  dateTime    TIMESTAMP            NOT NULL,
-  description VARCHAR              NOT NULL,
-  calories    INTEGER DEFAULT 2000 NOT NULL
+  id          INT PRIMARY KEY  DEFAULT nextval('meal_id'),
+  user_id     INT              DEFAULT 100000,
+  dateTime    TIMESTAMP        NOT NULL,
+  description VARCHAR          NOT NULL,
+  calories    INT DEFAULT 2000 NOT NULL,
+  CONSTRAINT meals_users_id_fk FOREIGN KEY (user_id) REFERENCES users (id)
 );
 CREATE UNIQUE INDEX meals_id_uindex
-  ON public.meals (id);   -- id mast be unique
+  ON public.meals (id);

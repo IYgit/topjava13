@@ -1,15 +1,7 @@
 package ru.javawebinar.topjava;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealWithExceed;
@@ -21,6 +13,15 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
+
+/**
+ * Testing in Spring:
+ * For set up Spring context into tests:
+ * Settings -> Editor -> Inspections:
+ * in right search field: setup =>>
+ * Spring -> Spring Core -> Setup:
+ * Facet XML Configuration -> Check test files (поставити галку)
+ * */
 
 
 public class SpringMain {

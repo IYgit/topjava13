@@ -1,8 +1,11 @@
+-- important the order of table deleting (reverse order)
+DELETE FROM meals;
 DELETE FROM user_roles;
 DELETE FROM users;
-DELETE FROM meals;
 
+-- reset global sequences
 ALTER SEQUENCE global_seq RESTART WITH 100000;
+ALTER SEQUENCE meal_id RESTART WITH 1;
 
 INSERT INTO users (name, email, password) VALUES
   ('User', 'user@yandex.ru', 'password'),
