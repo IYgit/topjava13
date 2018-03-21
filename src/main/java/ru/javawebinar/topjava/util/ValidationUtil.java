@@ -42,7 +42,7 @@ public class ValidationUtil {
     }
 
     public static void checkUserId(int userId, int id){
-        if (userId != userId)
+        if (userId != id)
             throw new IllegalUserAccessException(String.format(" from userId = %d to userId = %d\n", userId, id));
     }
 }

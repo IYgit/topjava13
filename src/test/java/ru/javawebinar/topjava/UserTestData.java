@@ -15,15 +15,18 @@ public class UserTestData {
     public static final User USER = new User(USER_ID, "User", "user@yandex.ru", "password", Role.ROLE_USER);
     public static final User ADMIN = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", Role.ROLE_ADMIN);
 
+
     public static void assertMatch(User actual, User expected) {
+        // exclude registered & roles fields from comparing
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered", "roles");
     }
 
-    public static void assertMatch(Iterable<User> actual, User... expected) {
+    public static void assertMatch(Iterable<User> actual, User... expected) { // important order of expected
         assertMatch(actual, Arrays.asList(expected));
     }
 
-    public static void assertMatch(Iterable<User> actual, Iterable<User> expected) {
+    public static void assertMatch(Iterable<User> actual, Iterable<User> expected) { // important order of expected
+        // exclude registered & roles fields from comparing
         assertThat(actual).usingElementComparatorIgnoringFields("registered", "roles").isEqualTo(expected);
     }
 }

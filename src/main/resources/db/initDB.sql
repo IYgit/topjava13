@@ -5,10 +5,10 @@ DROP TABLE IF EXISTS users;
 DROP SEQUENCE IF EXISTS global_seq;
 DROP SEQUENCE IF EXISTS meal_id;
 
-CREATE SEQUENCE global_seq
+CREATE SEQUENCE global_seq INCREMENT  BY 1
   START 100000; -- is used in user table
-CREATE SEQUENCE meal_id
-  START 1; -- is used in meals table
+CREATE SEQUENCE meal_id INCREMENT  BY 1
+  START 100000; -- is used in meals table
 
 CREATE TABLE users
 (

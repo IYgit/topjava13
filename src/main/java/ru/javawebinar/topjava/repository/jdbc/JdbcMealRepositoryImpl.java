@@ -12,6 +12,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.ValidationUtil;
+import ru.javawebinar.topjava.util.exception.IllegalUserAccessException;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
@@ -66,7 +67,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Meal get(int id, int userId) {
+    public Meal get(int id, int userId){
         ValidationUtil.checkUserId(id(), userId);
         List<Meal> meals = jdbcTemplate.query("SELECT * FROM meals where id = ?", ROW_MAPPER, id);
 
@@ -77,7 +78,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     public List<Meal> getAll(int userId) {
         ValidationUtil.checkUserId(id(), userId);
 
-        List<Meal> meals = jdbcTemplate.query("SELECT * FROM meals", ROW_MAPPER);
+        List<Meal> meals = jdbcTemplate.query("SELECT * FROM meals WHERE user_id = ?", ROW_MAPPER, userId);
         meals.sort((m1, m2) -> {
             int result = m2.getDate().compareTo(m1.getDate());
             return result != 0 ? result : m1.getTime().compareTo(m2.getTime());

@@ -19,13 +19,10 @@ import java.util.List;
 
 import static ru.javawebinar.topjava.UserTestData.*;
 
-@ContextConfiguration({
-        "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
-})
+@ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:spring/spring-db.xml"})
 @RunWith(SpringRunner.class)
 // before every testing DB will be populated with populatesDB.sql script
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@Sql(scripts = {"classpath:db/populateDB.sql"}, config = @SqlConfig(encoding = "UTF-8"))
 public class UserServiceTest {
 
     static {
@@ -41,7 +38,8 @@ public class UserServiceTest {
     public void create() throws Exception {
         User newUser = new User(null, "New", "new@gmail.com", "newPass", 1555, false, new Date(), Collections.singleton(Role.ROLE_USER));
         User created = service.create(newUser);
-        newUser.setId(created.getId());
+//        newUser.setId(created.getId());
+        // is equal service.getAll() and [ADMIN, newUser, USER]
         assertMatch(service.getAll(), ADMIN, newUser, USER);
     }
 
