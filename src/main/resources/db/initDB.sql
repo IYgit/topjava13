@@ -38,7 +38,7 @@ CREATE TABLE public.meals
   dateTime    TIMESTAMP        NOT NULL,
   description VARCHAR          NOT NULL,
   calories    INT DEFAULT 2000 NOT NULL,
-  CONSTRAINT meals_users_id_fk FOREIGN KEY (user_id) REFERENCES users (id)
+  FOREIGN KEY (user_id) REFERENCES users (id)
 );
 CREATE UNIQUE INDEX meals_id_uindex
   ON public.meals (id);
