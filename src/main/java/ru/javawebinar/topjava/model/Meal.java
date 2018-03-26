@@ -1,19 +1,35 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
+//@NamedQueries({
+//        @NamedQuery(name = Meal.UPDATE, query = )
+//})
+@Entity
+@Table(name = "meals")
 public class Meal extends AbstractBaseEntity {
+    public static final String UPDATE = "Meal.update";
+
+    @Column(name = "datetime", columnDefinition = "timestamp", nullable = false)
+    @NotNull
     private LocalDateTime dateTime;
 
+    @Column(name = "description", nullable = false)
+    @NotBlank
+    @Size(max = 50)
     private String description;
 
+    @Column(name = "calories", columnDefinition = "int", nullable = false)
+    @NotNull
     private int calories;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // при запиті їжі користуваа не доставати
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Meal() {

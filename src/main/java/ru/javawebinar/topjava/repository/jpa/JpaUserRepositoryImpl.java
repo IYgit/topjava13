@@ -15,6 +15,7 @@ import java.util.List;
 public class JpaUserRepositoryImpl implements UserRepository {
 
 /*
+    // З БД можна працювати через Session або EntityManager
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -23,8 +24,8 @@ public class JpaUserRepositoryImpl implements UserRepository {
     }
 */
 
-    @PersistenceContext
-    private EntityManager em;
+    @PersistenceContext // об'єкт для роботи з БД
+    private EntityManager em; // bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
 
     @Override
     @Transactional
@@ -49,6 +50,7 @@ public class JpaUserRepositoryImpl implements UserRepository {
 /*      User ref = em.getReference(User.class, id);
         em.remove(ref);
 
+        // запит на JPQL (підмножина HQL); User - клас, а не таблиця
         Query query = em.createQuery("DELETE FROM User u WHERE u.id=:id");
         return query.setParameter("id", id).executeUpdate() != 0;
 */
