@@ -11,7 +11,9 @@
 
     <!-- Change DB by comment/uncomment property-placeholder -->
 
+    <!-- postgreSQL DB (на диску)-->
     <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE"/>
+    <!-- HSQLDB (в пам'яті)-->
     <!--<context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>-->
 
     <context:component-scan base-package="ru.javawebinar.**.repository.jpa"/>

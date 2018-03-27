@@ -90,6 +90,9 @@ public class MealServiceTest {
     @Test
     public void get() throws Exception {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
+        /* завдяки @ElementCollection(fetch = FetchType.EAGER) над полем user в класі Meal
+         * для кожного meal, отриманого з БД, витягується user з таблиці users*/
+        System.out.println(getLine() + "user: " + actual.getUser());
         assertMatch(actual, ADMIN_MEAL1);
     }
 
@@ -123,5 +126,10 @@ public class MealServiceTest {
         assertMatch(service.getBetweenDates(
                 LocalDate.of(2015, Month.MAY, 30),
                 LocalDate.of(2015, Month.MAY, 30), USER_ID), MEAL3, MEAL2, MEAL1);
+    }
+
+    private String getLine() {
+        return this.getClass().getName() + ".(line:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ") " +
+                Thread.currentThread().getStackTrace()[2].getMethodName() + " ";
     }
 }

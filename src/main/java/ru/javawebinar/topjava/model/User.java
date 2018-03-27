@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.model;
 
+import org.hibernate.annotations.Columns;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.util.CollectionUtils;
 
@@ -44,11 +45,20 @@ public class User extends AbstractNamedEntity {
     @NotNull
     private Date registered = new Date();
 
+    // OneToMany
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
+    /* при отриманні об'єкта user з БД, поле roles буде ініціалізоване даними з таблиці user_roles
+     * якщо fetch = FetchType.LAZY, то roles = null (дані з таблиці не отримуються) */
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
+    //TODO ініціалізувати поле meals з таблиці meals (по аналогії з roles)
+    // OneToMany: https://en.wikibooks.org/wiki/Java_Persistence/OneToMany#Undirectional_OneToMany,_No_Inverse_ManyToOne,_No_Join_Table_(JPA_2.0)
+//    @OneToMany(targetEntity = Meal.class)
+//    @ElementCollection(fetch = FetchType.EAGER)
+//    private List<Meal> meals;
 
     @Column(name = "calories_per_day", columnDefinition = "int default 2000")
     @Range(min = 10, max = 10000)

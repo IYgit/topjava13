@@ -63,6 +63,10 @@ public class UserServiceTest {
     @Test
     public void get() throws Exception {
         User user = service.get(USER_ID);
+        /* завдяки @ElementCollection(fetch = FetchType.EAGER) над полем roles в класі User
+        * для кожного user, отриманого з БД, витягуються ролі з таблиці user_roles*/
+        System.out.println(getLine() + "role: " + user.getRoles());
+//        System.out.println(getLine() + "meals: " + user.getMeals());
         assertMatch(user, USER);
     }
 
@@ -90,5 +94,10 @@ public class UserServiceTest {
     public void getAll() throws Exception {
         List<User> all = service.getAll();
         assertMatch(all, ADMIN, USER);
+    }
+
+    private String getLine() {
+        return this.getClass().getName() + ".(line:" + Thread.currentThread().getStackTrace()[2].getLineNumber() + ") " +
+                Thread.currentThread().getStackTrace()[2].getMethodName() + " ";
     }
 }
