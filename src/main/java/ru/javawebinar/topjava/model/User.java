@@ -13,6 +13,7 @@ import java.util.*;
 import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
 @NamedQueries({
+        // в анотація використовуємо конктатнти, визначені в User
         @NamedQuery(name = User.DELETE, query = "DELETE FROM User u WHERE u.id=:id"),
         @NamedQuery(name = User.BY_EMAIL, query = "SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.email=?1"),
         @NamedQuery(name = User.ALL_SORTED, query = "SELECT u FROM User u LEFT JOIN FETCH u.roles ORDER BY u.name, u.email"),
@@ -26,8 +27,8 @@ public class User extends AbstractNamedEntity {
     public static final String ALL_SORTED = "User.getAllSorted";
 
     @Column(name = "email", nullable = false, unique = true)
-    @Email
-    @NotBlank
+    @Email // <groupId>org.hibernate.validator</groupId>
+    @NotBlank // <groupId>org.hibernate.validator</groupId>
     @Size(max = 100)
     private String email;
 
