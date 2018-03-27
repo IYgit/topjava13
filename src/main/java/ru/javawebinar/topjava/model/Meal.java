@@ -39,7 +39,8 @@ public class Meal extends AbstractBaseEntity {
     @Range(min = 10, max = 5000)
     private int calories;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    // при отримання з БД об'єкта meal, поле user не буде ініціалізовано, оскільки FetchType.LAZY
+    @ManyToOne(fetch = FetchType.EAGER) // за замовчанням RetchType.EAGER
     @JoinColumn(name = "user_id", nullable = false)
     @NotNull
     private User user;
