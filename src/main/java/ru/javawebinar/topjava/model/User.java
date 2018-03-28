@@ -56,8 +56,6 @@ public class User extends AbstractNamedEntity {
 
     //TODO ініціалізувати поле meals з таблиці meals (по аналогії з roles)
     // OneToMany: https://en.wikibooks.org/wiki/Java_Persistence/OneToMany#Undirectional_OneToMany,_No_Inverse_ManyToOne,_No_Join_Table_(JPA_2.0)
-//    @OneToMany(targetEntity = Meal.class)
-//    @ElementCollection(fetch = FetchType.EAGER)
 //    private List<Meal> meals;
 
     @Column(name = "calories_per_day", columnDefinition = "int default 2000")

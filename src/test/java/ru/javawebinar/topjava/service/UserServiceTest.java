@@ -66,7 +66,6 @@ public class UserServiceTest {
         /* завдяки @ElementCollection(fetch = FetchType.EAGER) над полем roles в класі User
         * для кожного user, отриманого з БД, витягуються ролі з таблиці user_roles*/
         System.out.println(getLine() + "role: " + user.getRoles());
-//        System.out.println(getLine() + "meals: " + user.getMeals());
         assertMatch(user, USER);
     }
 
