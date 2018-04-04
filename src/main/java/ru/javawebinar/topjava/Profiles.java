@@ -13,6 +13,7 @@ public class Profiles {
             HSQL_DB = "hsqldb";
 
     //  Get DB profile depending of DB driver in classpath
+    // JDBC драйвери завантажуються в Maven в <profiles>
     public static String getActiveDbProfile() {
         try {
             Class.forName("org.postgresql.Driver");

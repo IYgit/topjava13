@@ -10,6 +10,40 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
+/**
+ * Методи, позначені @Transactional виконуються як транзакція, т.т. метод або повнісю виконався, або повністю не виконався.
+ * Кожна транзакція - це нове з'єднання з БД. При вході в метод транзакція відкривається, при виході - закривається.
+ * В JPA транзакції треба здійснювати вручну:
+ *
+ * UserTransaction utx = entityManager.getTransaction();
+ * try {
+ *      utx.begin();
+ *      businessLogic();
+ *      utx.commit();
+ * } catch(Exception ex) {
+ *      utx.rollback();
+ *      throw ex;
+ * }
+ *
+ * В Spring це робиться з допомогою транзакцій @Transactional(readOnly = true, propagation=Propagation.REQUIRED, rollbackFor=Exception.class):
+ * readOnly = true - дозволяються лише операції читання. Якщо здійснити вставку в БД, відбудеться Exception при роботі через JDBC
+ * (при ORM в більшості випадків прапор readOnly ігнорується);
+ * propagation=Propagation.REQUIRED - для метода розпочати нову транзакцію (режим за замовчанням);
+ * rollbackFor=Exception.class - будь-яке викллючення призведе до відкату транзакції.
+ *
+ * @Transactional(readOnly = true, propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+ * public long insertTrade(TradeData trade) throws Exception {
+        //Робота через JDBC...
+        }
+ *
+ * propagation=Propagation.SUPPORTS - виконати метод в поточній (вже відкритій) транзкації;
+ * readOnly = true - проігнорується, оскільки спрацьовує лише при відкритті нової транзакції.
+ * @Transactional(readOnly = true, propagation=Propagation.SUPPORTS)
+ * public long insertTrade(TradeData trade) throws Exception {
+        //Работа через JDBC...
+        }
+*/
+
 @Repository
 @Transactional(readOnly = true)
 public class JpaUserRepositoryImpl implements UserRepository {

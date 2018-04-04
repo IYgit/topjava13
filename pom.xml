@@ -88,6 +88,7 @@
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
+            <!-- підтримує кешування-->
             <artifactId>spring-context-support</artifactId>
         </dependency>
         <dependency>
@@ -164,9 +165,20 @@
 
     </dependencies>
 
+    <!--
+    // можливість змінювати конфігурацію Maven
+    // Створення профілів для зручної зміни драйвера БД у вікні MavenProjects. У вікні MavenProjects (налаштування Maven) з'явиться 2-а профілі:
+        hsqldb та postgres (переключення галкою)
+    // профіль вказується в анотації @ActiveProfiles(Profiles.ACTIVE_DB) (класи UserServiceTest, MealServiceTest)
+    // профіль визначається в програмі шляхом виклику методу Profiles.getActiveDbProfile()
+    /* Для зміни БД потібно:
+        - обрати необхідний профіль у вікні MavenProjects (postgres/hsqldb);
+        - почистити Maven: mvn clean */
+    -->
+
     <profiles>
         <profile>
-            <id>hsqldb</id>
+            <id>hsqldb</id> <!--// профіль hsqldb-->
             <dependencies>
                 <dependency>
                     <groupId>org.hsqldb</groupId>
@@ -176,7 +188,7 @@
             </dependencies>
         </profile>
         <profile>
-            <id>postgres</id>
+            <id>postgres</id>   <!-- // профіль postgres -->
             <dependencies>
                 <dependency>
                     <groupId>org.postgresql</groupId>
@@ -190,12 +202,19 @@
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
-            <activation>
+            <activation> <!-- // профіль за замовчанням postgres (знаходимося в postgres)-->
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
     </profiles>
 
+    <!-- // завдяки тегу <dependencyManagement> можна прибрати версію Spring в залежностях
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+     -->
     <dependencyManagement>
         <dependencies>
             <dependency>

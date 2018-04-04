@@ -29,6 +29,17 @@ import static ru.javawebinar.topjava.UserTestData.*;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+/** автовизначення активного профілю з допомогою класу ActiveDbProfileResolver.
+ * Метод ActiveDbProfileResolver.getActiveDbProfile() поверне Profiles.POSTGRES_DB або Profiles.HSQL_DB
+ * в залежності від того, який JDBC-драйвер завантажено в Maven.
+ * В залежності від цього значення буде обрано бін <bean id="dataSource" ...> ... </bean> в spring-db.xml
+ * В цьому місці ми вказуємо Spring як конфігурувати бін dataSource (<beans profile="hsqldb"> або <beans profile="postgres"> в spring-db.xml) */
+/*Для зміни БД потібно:
+    - обрати необхідний профіль в MavenProjects (postgres/hsqldb);
+    - почистити Maven: mvn clean
+ можна профіль вручну вказати:
+    @ActiveProfile("hsqlsdb") // профіль hsqldb
+    @ActiveProfile("postgres") // профіль postgres */
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
 public class UserServiceTest {
 

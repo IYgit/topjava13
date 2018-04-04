@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
         this.repository = repository;
     }
 
+    // при виклику метода відбувається корекція вмісту кешу (кешуємо результат методу getAll())
     @CacheEvict(value = "users", allEntries = true)
     @Override
     public User create(User user) {
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
         return repository.save(user);
     }
 
+    // при виклику метода відбувається корекція вмісту кешу
     @CacheEvict(value = "users", allEntries = true)
     @Override
     public void delete(int id) throws NotFoundException {
@@ -48,6 +50,7 @@ public class UserServiceImpl implements UserService {
         return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
+    // кешування результату. При 1-му виклику результати будуть отримані з БД, при 2-му виклику - з кешу.
     @Cacheable("users")
     @Override
     public List<User> getAll() {
