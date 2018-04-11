@@ -10,9 +10,10 @@ import java.util.List;
 
 @Repository
 public class DataJpaUserRepositoryImpl implements UserRepository {
+    // параметри: напрямок_сортування (ACS/DESC); поля (User), по яким відбувається сортування
     private static final Sort SORT_NAME_EMAIL = new Sort(Sort.Direction.ASC, "name", "email");
 
-    @Autowired
+    @Autowired // проксі об'єкт, через який рпацюємо з БД
     private CrudUserRepository crudRepository;
 
     @Override

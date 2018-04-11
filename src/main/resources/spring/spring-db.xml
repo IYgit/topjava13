@@ -11,6 +11,7 @@
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
+    <!-- вказуємо для яких репозиторіїв потрібно створювати проксі -->
     <!--<context:component-scan base-package="ru.javawebinar.**.repository.jpa"/>-->
 
     <context:component-scan base-package="ru.javawebinar.**.repository.datajpa"/>
