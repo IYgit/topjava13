@@ -12,10 +12,14 @@ import ru.javawebinar.topjava.model.User;
 import java.util.List;
 import java.util.Optional;
 
+/*
+* @Transactional з default propagation REQUIRED (підтримує поточну транзакцію, створює нову, якщо немає)
+* ставиться там, де потрібно розпочати транзакцію. Інші методи будуть брати участь в цій транзакції.*/
 @Transactional(readOnly = true)
 public interface CrudUserRepository extends JpaRepository<User, Integer> {
     @Transactional
     @Modifying
+    /*в метод поступає параметр id, він передається в якості параметра в sql-запит в анотоції @Query("") */
     @Query("DELETE FROM User u WHERE u.id=:id")
     int delete(@Param("id") int id);
 
