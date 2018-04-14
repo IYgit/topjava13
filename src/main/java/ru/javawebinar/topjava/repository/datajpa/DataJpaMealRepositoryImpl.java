@@ -16,47 +16,36 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
     @Autowired
     private CrudMealRepository crudRepository;
 
+    @Autowired
+    private CrudUserRepository crudUserRepository;
+
     @Override
     public Meal save(Meal meal, int userId) {
         // умова виконується при доступі до чужої їжі
         if (!meal.isNew() && get(meal.getId(), userId) == null)
             return null;
-        // set user?
+        meal.setUser(crudUserRepository.findById(userId).get());
 
         return crudRepository.save(meal);
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        Meal meal = get(id, userId);
-        if (meal != null){
-            crudRepository.delete(meal);
-            return true;
-        }
-        return false;
+        return crudRepository.delete(id, userId);
     }
 
     @Override
     public Meal get(int id, int userId) {
-        Meal meal = crudRepository.findById(id).get();
-        return meal != null && meal.getUser().getId() == userId ? meal : null;
+        return crudRepository.get(id, userId);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        List<Meal> mealList = crudRepository.findAll(SORT_DATETIME);
-        mealList.sort((m1, m2) -> {
-            int result = m2.getDate().compareTo(m1.getDate());
-            if (result != 0) return result;
-            else return m1.getTime().compareTo(m2.getTime());
-        });
-
-        return mealList;
+        return crudRepository.getAll(userId);
     }
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-
-        return null;
+        return crudRepository.getBetween(startDate, endDate, userId);
     }
 }
