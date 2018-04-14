@@ -1,6 +1,8 @@
 package ru.javawebinar.topjava.model;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.util.CollectionUtils;
 
@@ -13,6 +15,7 @@ import java.util.*;
 
 import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @NamedQueries({
         // в анотація використовуємо конктатнти, визначені в User
         @NamedQuery(name = User.DELETE, query = "DELETE FROM User u WHERE u.id=:id"),
@@ -48,6 +51,7 @@ public class User extends AbstractNamedEntity {
     @NotNull
     private Date registered = new Date();
 
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
