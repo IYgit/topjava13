@@ -5,7 +5,9 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.util.CollectionUtils;
+import ru.javawebinar.topjava.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -38,6 +40,7 @@ public class User extends AbstractNamedEntity {
     @Email // <groupId>org.hibernate.validator</groupId>
     @NotBlank // <groupId>org.hibernate.validator</groupId>
     @Size(max = 100)
+    @SafeHtml(groups = {View.Web.class})  // https://stackoverflow.com/questions/17480809
     private String email;
 
     @Column(name = "password", nullable = false)
